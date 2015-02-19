@@ -13,7 +13,7 @@ class DomoticzCmd extends SQLiteEntity{
 	protected $object_fields = 
 	array(
 		'id'=>'key',
-		'idx'=>'int',
+		'idx'=>'string',
 		'type'=>'string',
 		'device'=>'string',
 		'cmdOn'=>'string',

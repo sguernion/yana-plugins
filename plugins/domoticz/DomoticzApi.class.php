@@ -153,6 +153,7 @@ class DomoticzApi {
 				if (is_array($row)){
 					foreach($row as $row2){
 						$row2['categorie']="variable";
+						$row2['idx']="v".$row2['idx'];
 						$row2['Type']=$this->variableType[$row2['Type']];
 						$devices[] =$row2;
 		}}}}
@@ -162,8 +163,9 @@ class DomoticzApi {
 	}
 	
 	function getUserVariable($id){
+		$idx = substr($id,1,strlen ($id));
 		$url =  $this->getUrl();
-		$url .=	'/json.htm?type=command&param=getuservariable&idx='.$id;
+		$url .=	'/json.htm?type=command&param=getuservariable&idx='.$idx;
 		$infos = $this->get($url);
 		return $infos['result'][0];
 	}
