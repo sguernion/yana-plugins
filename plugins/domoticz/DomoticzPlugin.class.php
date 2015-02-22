@@ -109,7 +109,7 @@ class DomoticzPlugin{
 					$domoticz->setCategorie($row2['categorie']);
 					if($row2['Type'] == 'Scene')
 					{
-						$domoticz->setCmdOn(', mode '.$row2['Name']);
+						$domoticz->setCmdOn('mode '.$row2['Name']);
 						$domoticz->setReponsesOn( str_replace('{NAME}',$row2['Name'],$this->phrases['switchscene']['On']));
 					}else if($row2['categorie'] == 'mesure'){		
 						$domoticz->setCmdOn($row2['Name']);
