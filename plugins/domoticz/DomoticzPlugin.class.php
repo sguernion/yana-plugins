@@ -255,7 +255,8 @@ class DomoticzPlugin{
 	
 	function domoticz_widget_setting($_){
 		if(isset($_['devices'])){
-			$this->conf->put('widgets_devices',$_['devices'],'domoticz');
+			
+			$this->conf->put('widgets_devices',implode (',',$_['devices']),'domoticz');
 		}
 		header('location:index.php');
 	}
@@ -268,9 +269,23 @@ class DomoticzPlugin{
 				
 				echo '<form class="form-inline" action="action.php?action=domoticz_widget_setting" method="POST">
 											<label>Widget Devices (id1,id2..)</label><br/>
-											<input type="text" class="input-xlarge" name="devices" value="'.$this->conf->get('widgets_devices','domoticz').'" >						
+											<select multiple name="devices[]" >';
+											$selected = explode (',',$this->conf->get('widgets_devices','domoticz'));
+											$devices = $this->domoticzApi->getSwitches();
+											if (is_array($devices)){
+												foreach($devices as $row2){
+												  echo '<option value="'.$row2['idx'].'"';
+												  foreach($selected as $id){
+													if($id == $row2['idx']){
+														echo 'selected';
+													}
+												  }
+												  echo '>'.$row2['Name'].'</option>';
+											}}
+											echo '</select>				
 											<br/><button type="submit" class="btn">Sauvegarder</button></form>';
 											exit(0);
+											//<input type="text" class="input-xlarge" name="devices" value="'.$this->conf->get('widgets_devices','domoticz').'" >	
 				break;
 			}
 	}

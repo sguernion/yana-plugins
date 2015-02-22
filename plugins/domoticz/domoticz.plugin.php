@@ -35,7 +35,7 @@ function domoticz_vocal_command(&$response,$actionUrl){
 				
 				}
 			}else{
-				$phrase = $this->phrases[$type];
+				
 			}
 		
 			
@@ -189,7 +189,7 @@ function domoticz_plugin_page(){
 										<!--td><?php //echo $row->getType(); 
 										?></td -->
 										<td><?php echo $row->getDevice(); ?></td>
-										<td><?php echo $conf->get('VOCAL_ENTITY_NAME').", ".$row->getCmdOn();?></td>
+										<td><?php echo ($row->getCmdOn()!=""?$conf->get('VOCAL_ENTITY_NAME').", ":'-').$row->getCmdOn();?></td>
 										<td><?php echo ($row->getCmdOff()!=""?$conf->get('VOCAL_ENTITY_NAME').", ":'-').$row->getCmdOff();?></td>
 										<td><?php echo $row->getConfidence(); ?></td>
 										<td><a class="btn" href="action.php?action=domoticz_enable&idx=<?php echo $row->getIdx(); ?>" >
