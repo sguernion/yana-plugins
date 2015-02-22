@@ -23,19 +23,32 @@ function domoticz_vocal_command(&$response,$actionUrl){
 
 	if (is_array($domoticzCmd)){
 		foreach($domoticzCmd as $row){
-			$response['commands'][] = array(
-				'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn(),
-				'url'=> $actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx().'&name='.urlencode ($row->getDevice()),
-				'confidence'=>$row->getConfidence(),
-				'categorie'=>'Domoticz'
-				);	
+			if($row->getCmdOn() != "" ){
+				$phrasesOn = explode(';',$row->getCmdOn());
+				foreach($phrasesOn as $cmdOn){
+					$response['commands'][] = array(
+					'command'=>$conf->get('VOCAL_ENTITY_NAME').", ".$cmdOn,
+					'url'=> $actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=On'.'&idx='.$row->getIdx().'&name='.urlencode ($row->getDevice()),
+					'confidence'=>$row->getConfidence(),
+					'categorie'=>'Domoticz'
+					);	
+				
+				}
+			}else{
+				$phrase = $this->phrases[$type];
+			}
+		
+			
 			if($row->getCmdOff() != null){
+				$phrasesOff = explode(';',$row->getCmdOff());
+				foreach($phrasesOff as $cmdOff){
 				$response['commands'][] = array(
-					'command'=>$conf->get('VOCAL_ENTITY_NAME').$row->getCmdOff(),
+					'command'=>$conf->get('VOCAL_ENTITY_NAME').", ".$cmdOff,
 					'url'=> $actionUrl.'?action=domoticz_action_'.$row->getCategorie().'&state=Off'.'&idx='.$row->getIdx().'&name='.urlencode ($row->getDevice()),
 					'confidence'=>$row->getConfidence(),
 					'categorie'=>'Domoticz'
-					);		
+					);
+				}
 			}
 		}
 	}
@@ -45,8 +58,8 @@ function domoticz_vocal_command(&$response,$actionUrl){
 function domoticz_action(){
 	global $_,$conf,$myUser;
 	
-	$phrases['switchlight']['Off'] = 'je viens d\'eteindre {NAME}';
-	$phrases['switchlight']['On'] = 'je viens d\'allumer {NAME}';
+	$phrases['switchlight']['Off'] = 'je viens d eteindre {NAME}';
+	$phrases['switchlight']['On'] = 'je viens d allumer {NAME}';
 	$phrases['switchscene']['On'] = 'mode {NAME} actif';
 	$phrases['switchscene']['Off'] = 'mode {NAME} inactif';
 	$phrases['temperature'] = 'il fait {VALUE}';
@@ -159,8 +172,8 @@ function domoticz_plugin_page(){
 							<!--th>Type</th -->
 							<th>Device</th>
 							
-							<th>Commande vocale On</th>
-							<th>Commande vocale Off</th>
+							<th>Commandes vocale On</th>
+							<th>Commandes vocale Off</th>
 							<th>Confidence</th>
 							<th>Actions</th>
 						</tr>
@@ -176,8 +189,8 @@ function domoticz_plugin_page(){
 										<!--td><?php //echo $row->getType(); 
 										?></td -->
 										<td><?php echo $row->getDevice(); ?></td>
-										<td><?php echo $conf->get('VOCAL_ENTITY_NAME').$row->getCmdOn();?></td>
-										<td><?php echo ($row->getCmdOff()!=""?$conf->get('VOCAL_ENTITY_NAME'):'-').$row->getCmdOff();?></td>
+										<td><?php echo $conf->get('VOCAL_ENTITY_NAME').", ".$row->getCmdOn();?></td>
+										<td><?php echo ($row->getCmdOff()!=""?$conf->get('VOCAL_ENTITY_NAME').", ":'-').$row->getCmdOff();?></td>
 										<td><?php echo $row->getConfidence(); ?></td>
 										<td><a class="btn" href="action.php?action=domoticz_enable&idx=<?php echo $row->getIdx(); ?>" >
 										<?php 
@@ -209,26 +222,41 @@ function domoticz_plugin_page(){
 						<legend>Modification de la Commande Vocale</legend>
 							<input type="hidden"  name="idx" value="<?php echo $domoticz->getIdx();?>" >
 							<label>Devices : </label><?php echo $domoticz->getDevice();?>	
-							<br/><br/><label>Commande On : </label><br/>
-							<?php echo $conf->get('VOCAL_ENTITY_NAME') ?> <input type="text" class="input-large" name="cmdOn" value="<?php echo $domoticz->getCmdOn();?>" >					
-							<br/><br/><label>Commande Off : </label><br/>
-							<?php echo $conf->get('VOCAL_ENTITY_NAME') ?> <input type="text" class="input-large" name="cmdOff" value="<?php echo $domoticz->getCmdOff();?>" >		
-							<br/><br/><label>R&eacute;ponses On (s&eacutepar&eacutees par un ;) : </label><br/>
+							<br/><label>Commande On (s&eacutepar&eacutees par un ;) : </label><br/>
+							<?php echo $conf->get('VOCAL_ENTITY_NAME').", " ?> <input type="text" class="input-large" name="cmdOn" value="<?php echo $domoticz->getCmdOn();?>" >	
+							<?php
+								foreach(explode(';',urldecode($domoticz->getCmdOn())) as $cmdOn){
+							?>
+								<p><?php echo $cmdOn; ?> <a href="">x</a> </p>
+							<?php } ?>		
+							<?php if($domoticz->getType() != 'Scene' && $domoticz->getCategorie() != 'mesure' && $domoticz->getCategorie() != 'utility' && $domoticz->getCategorie() != 'variable')
+							{ ?>							
+							<br/><label>Commande Off (s&eacutepar&eacutees par un ;) : </label><br/>
+							<?php echo $conf->get('VOCAL_ENTITY_NAME').", " ?> <input type="text" class="input-large" name="cmdOff" value="<?php echo $domoticz->getCmdOff();?>" >		
+							<?php
+								foreach(explode(';',urldecode($domoticz->getCmdOff())) as $cmdOff){
+							?>
+								<p><?php echo $cmdOff; ?> <a href="">x</a> </p>
+							<?php }} ?>	
+							
+							<br/><label>R&eacute;ponses On (s&eacutepar&eacutees par un ;) : </label><br/>
 							<input type="text" class="input-large" name="reponsesOn" value="<?php echo $domoticz->getReponsesOn();?>" >	{NAME} est remplac&eacute par le nom du device, {VALUE} est remplac&eacute par la valeur du device				
 							<?php
 								foreach(explode(';',urldecode($domoticz->getReponsesOn())) as $reponse){
 							?>
 								<p><?php echo $reponse; ?> <a href="">x</a> </p>
 							<?php } ?>
-							
-							<label>R&eacuteponses Off (s&eacutepar&eacutees par un ;) : </label><br/>
+							<?php if($domoticz->getType() != 'Scene' && $domoticz->getCategorie() != 'mesure' && $domoticz->getCategorie() != 'utility' && $domoticz->getCategorie() != 'variable')
+							{ ?>
+							<br/><label>R&eacuteponses Off (s&eacutepar&eacutees par un ;) : </label><br/>
 							<input type="text" class="input-large" name="reponsesOff" value="<?php echo $domoticz->getReponsesOff();?>" >
 							<?php
 								foreach(explode(';',urldecode($domoticz->getReponsesOff())) as $reponse){
 							?>
 								<p><?php echo $reponse; ?> <a href="">x</a> </p>
-							<?php } ?>
-							<label>Confidence :</label><br/>
+							<?php }} ?>
+							
+							<br/><label>Confidence :</label><br/>
 							<select name="confidence" id="confidence">
                                 <?php for($confidence=1; $confidence<=9; $confidence++){ ?>        
 									
@@ -253,8 +281,8 @@ function domoticz_plugin_page(){
 							<th>Type</th>
 							<th>Device</th>
 							
-							<th>Commande vocale On</th>
-							<th>Commande vocale Off</th>
+							<th>Commandes vocale On</th>
+							<th>Commandes vocale Off</th>
 							<th>Confidence</th>
 							<th>Actions</th>
 						</tr>

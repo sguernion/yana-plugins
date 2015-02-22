@@ -112,18 +112,18 @@ class DomoticzPlugin{
 						$domoticz->setCmdOn(', mode '.$row2['Name']);
 						$domoticz->setReponsesOn( str_replace('{NAME}',$row2['Name'],$this->phrases['switchscene']['On']));
 					}else if($row2['categorie'] == 'mesure'){		
-						$domoticz->setCmdOn(',  '.$row2['Name']);
+						$domoticz->setCmdOn($row2['Name']);
 						$domoticz->setReponsesOn($this->phrases[$row2['categorie']]);
 					}else if($row2['categorie'] == 'variable'){	
-						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
+						$domoticz->setCmdOn('valeur '.$row2['Name']);
 						$domoticz->setReponsesOn($this->phrases[$row2['categorie']]);
 					}else if($row2['categorie'] == 'utility'){	
-						$domoticz->setCmdOn(',  valeur '.$row2['Name']);
+						$domoticz->setCmdOn('valeur '.$row2['Name']);
 						$domoticz->setReponsesOn($this->phrases[$row2['categorie']]);
 						
 					}else {
-						$domoticz->setCmdOn(', allume '.$row2['Name']);
-						$domoticz->setCmdOff(', eteint '.$row2['Name']);
+						$domoticz->setCmdOn('allume '.$row2['Name']);
+						$domoticz->setCmdOff('eteint '.$row2['Name']);
 						
 						$domoticz->setReponsesOn(str_replace('{NAME}',$row2['Name'],$this->phrases['switchlight']['On']));
 						$domoticz->setReponsesOff(str_replace('{NAME}',$row2['Name'],$this->phrases['switchlight']['Off']));
@@ -146,8 +146,8 @@ class DomoticzPlugin{
 		$domoticz = new DomoticzCmd();
 		$domoticz = $domoticz->load(array('idx'=>$_['idx']));
 		
-		$domoticz->setCmdOn($_['cmdOn']);
-		$domoticz->setCmdOff($_['cmdOff']);
+		$domoticz->setCmdOn(urldecode($_['cmdOn']));
+		$domoticz->setCmdOff(urldecode($_['cmdOff']));
 		$domoticz->setReponsesOn(urldecode ($_['reponsesOn']));
 		$domoticz->setReponsesOff(urldecode ($_['reponsesOff']));
 		$domoticz->setConfidence($_['confidence']);
@@ -214,6 +214,10 @@ class DomoticzPlugin{
 	function action_device_mesure($_){
 		$type="temperature";
 		$field='Temp';
+		
+		$domoticz = new DomoticzCmd();
+		$domoticz = $domoticz->load(array('idx'=>$_['idx']));
+		
 		//TODO gestion des mesures % ...
 		if($_['action'] == 'domoticz_action_variable'){ 
 			$type="variable";

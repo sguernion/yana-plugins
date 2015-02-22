@@ -82,9 +82,13 @@ class DomoticzApi {
 		return $devices;
 	}
 	
-	function setState($type,$ix,$state){
+	function setState($type,$id,$state){
+		if($type == 'Scene' || $type == 'Groupe'){
+		$idx = substr($id,1,strlen ($id));
+		}else{$idx =$id;}
+	
 		$url = $this->getUrl();
-		$url .= '/json.htm?type=command&param='.$type.'&idx='.urlencode($ix).'&switchcmd='.$state.'&level=0';
+		$url .= '/json.htm?type=command&param='.$type.'&idx='.urlencode($idx).'&switchcmd='.$state.'&level=0';
 		$this->get($url);
 	}
 	
@@ -99,6 +103,7 @@ class DomoticzApi {
 				if (is_array($row)){
 					foreach($row as $row2){
 						$row2['categorie']="scene";
+						$row2['idx']="s".$row2['idx'];
 						$devices[] =$row2;
 		}}}}
 		
