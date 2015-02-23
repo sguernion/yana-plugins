@@ -14,10 +14,10 @@ require_once('DomoticzPlugin.class.php');
 @description Permet la commande vocale des interrupteurs domoticz
 */
 
-$vocal_sep = ",";
 
 function domoticz_vocal_command(&$response,$actionUrl){
 	global $conf;
+	$vocal_sep = ",";
 	$domoticz = new DomoticzCmd();
 	$domoticzCmd = $domoticz->loadAll(array('vocal'=>true));
 
@@ -142,6 +142,7 @@ function domoticz_widget_plugin_menu(&$widgets){
 
 function domoticz_plugin_page(){
 	global $myUser,$_,$conf;
+	$vocal_sep = ',';
 	if((isset($_['section']) && $_['section']=='domoticz')  ){
 		if($myUser!=false){
 		
@@ -225,7 +226,7 @@ function domoticz_plugin_page(){
 							<br/><label>Commande On (s&eacutepar&eacutees par un <?php echo $vocal_sep;?> ) : </label><br/>
 							<?php echo $conf->get('VOCAL_ENTITY_NAME').", " ?> <input type="text" class="input-large" name="cmdOn" value="<?php echo $domoticz->getCmdOn();?>" >	
 							<?php
-								foreach(explode(';',urldecode($domoticz->getCmdOn())) as $cmdOn){
+								foreach(explode($vocal_sep,urldecode($domoticz->getCmdOn())) as $cmdOn){
 							?>
 								<p><?php echo $cmdOn; ?> <a href="">x</a> </p>
 							<?php } ?>		

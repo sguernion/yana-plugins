@@ -13,7 +13,7 @@ class DomoticzPlugin{
 	protected $conf;
 	protected $phrases;
 	protected $domoticzApi;
-	protected $vocal_sep = ",";
+	public $vocal_sep = ',';
 	
 	function __construct($conf,$phrases){
 		$this->conf = $conf;
