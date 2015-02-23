@@ -83,8 +83,8 @@ class DomoticzApi {
 	}
 	
 	function setState($type,$id,$state){
-		if($type == 'Scene' || $type == 'Groupe'){
-		$idx = substr($id,1,strlen ($id));
+		if($type == 'switchscene'){
+			$idx = substr($id,1,strlen ($id));
 		}else{$idx =$id;}
 	
 		$url = $this->getUrl();

@@ -14,7 +14,7 @@ require_once('DomoticzPlugin.class.php');
 @description Permet la commande vocale des interrupteurs domoticz
 */
 
-
+$vocal_sep = ",";
 
 function domoticz_vocal_command(&$response,$actionUrl){
 	global $conf;
@@ -24,7 +24,7 @@ function domoticz_vocal_command(&$response,$actionUrl){
 	if (is_array($domoticzCmd)){
 		foreach($domoticzCmd as $row){
 			if($row->getCmdOn() != "" ){
-				$phrasesOn = explode(';',$row->getCmdOn());
+				$phrasesOn = explode($vocal_sep,$row->getCmdOn());
 				foreach($phrasesOn as $cmdOn){
 					$response['commands'][] = array(
 					'command'=>$conf->get('VOCAL_ENTITY_NAME').", ".$cmdOn,
@@ -40,7 +40,7 @@ function domoticz_vocal_command(&$response,$actionUrl){
 		
 			
 			if($row->getCmdOff() != null){
-				$phrasesOff = explode(';',$row->getCmdOff());
+				$phrasesOff = explode($vocal_sep,$row->getCmdOff());
 				foreach($phrasesOff as $cmdOff){
 				$response['commands'][] = array(
 					'command'=>$conf->get('VOCAL_ENTITY_NAME').", ".$cmdOff,
@@ -222,7 +222,7 @@ function domoticz_plugin_page(){
 						<legend>Modification de la Commande Vocale</legend>
 							<input type="hidden"  name="idx" value="<?php echo $domoticz->getIdx();?>" >
 							<label>Devices : </label><?php echo $domoticz->getDevice();?>	
-							<br/><label>Commande On (s&eacutepar&eacutees par un ;) : </label><br/>
+							<br/><label>Commande On (s&eacutepar&eacutees par un <?php echo $vocal_sep;?> ) : </label><br/>
 							<?php echo $conf->get('VOCAL_ENTITY_NAME').", " ?> <input type="text" class="input-large" name="cmdOn" value="<?php echo $domoticz->getCmdOn();?>" >	
 							<?php
 								foreach(explode(';',urldecode($domoticz->getCmdOn())) as $cmdOn){
@@ -231,27 +231,27 @@ function domoticz_plugin_page(){
 							<?php } ?>		
 							<?php if($domoticz->getType() != 'Scene' && $domoticz->getCategorie() != 'mesure' && $domoticz->getCategorie() != 'utility' && $domoticz->getCategorie() != 'variable')
 							{ ?>							
-							<br/><label>Commande Off (s&eacutepar&eacutees par un ;) : </label><br/>
+							<br/><label>Commande Off (s&eacutepar&eacutees par un <?php echo $vocal_sep;?> ) : </label><br/>
 							<?php echo $conf->get('VOCAL_ENTITY_NAME').", " ?> <input type="text" class="input-large" name="cmdOff" value="<?php echo $domoticz->getCmdOff();?>" >		
 							<?php
-								foreach(explode(';',urldecode($domoticz->getCmdOff())) as $cmdOff){
+								foreach(explode($vocal_sep,urldecode($domoticz->getCmdOff())) as $cmdOff){
 							?>
 								<p><?php echo $cmdOff; ?> <a href="">x</a> </p>
 							<?php }} ?>	
 							
-							<br/><label>R&eacute;ponses On (s&eacutepar&eacutees par un ;) : </label><br/>
+							<br/><label>R&eacute;ponses On (s&eacutepar&eacutees par un <?php echo $vocal_sep;?>) : </label><br/>
 							<input type="text" class="input-large" name="reponsesOn" value="<?php echo $domoticz->getReponsesOn();?>" >	{NAME} est remplac&eacute par le nom du device, {VALUE} est remplac&eacute par la valeur du device				
 							<?php
-								foreach(explode(';',urldecode($domoticz->getReponsesOn())) as $reponse){
+								foreach(explode($vocal_sep,urldecode($domoticz->getReponsesOn())) as $reponse){
 							?>
 								<p><?php echo $reponse; ?> <a href="">x</a> </p>
 							<?php } ?>
 							<?php if($domoticz->getType() != 'Scene' && $domoticz->getCategorie() != 'mesure' && $domoticz->getCategorie() != 'utility' && $domoticz->getCategorie() != 'variable')
 							{ ?>
-							<br/><label>R&eacuteponses Off (s&eacutepar&eacutees par un ;) : </label><br/>
+							<br/><label>R&eacuteponses Off (s&eacutepar&eacutees par un <?php echo $vocal_sep;?>) : </label><br/>
 							<input type="text" class="input-large" name="reponsesOff" value="<?php echo $domoticz->getReponsesOff();?>" >
 							<?php
-								foreach(explode(';',urldecode($domoticz->getReponsesOff())) as $reponse){
+								foreach(explode($vocal_sep,urldecode($domoticz->getReponsesOff())) as $reponse){
 							?>
 								<p><?php echo $reponse; ?> <a href="">x</a> </p>
 							<?php }} ?>

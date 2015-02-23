@@ -13,6 +13,7 @@ class DomoticzPlugin{
 	protected $conf;
 	protected $phrases;
 	protected $domoticzApi;
+	protected $vocal_sep = ",";
 	
 	function __construct($conf,$phrases){
 		$this->conf = $conf;
@@ -174,11 +175,11 @@ class DomoticzPlugin{
 		
 		if($domoticz->getReponsesOn() != "" && $_['state'] == "On" ){
 		
-			$phrasesOn = explode(';',$domoticz->getReponsesOn());
+			$phrasesOn = explode($this->vocal_sep,$domoticz->getReponsesOn());
 			$phrase = $phrasesOn[rand(0,count($phrasesOn)-1)];
 		}elseif($domoticz->getReponsesOff() != "" && $_['state'] == "Off" ){
 		
-			$phrasesOff = explode(';',$domoticz->getReponsesOff());
+			$phrasesOff = explode($this->vocal_sep,$domoticz->getReponsesOff());
 			$phrase = $phrasesOff[rand(0,count($phrasesOff)-1)];
 		}else{
 			$phrase = $this->phrases['switchlight'][$_['state']];
@@ -190,7 +191,10 @@ class DomoticzPlugin{
                           array('type'=>'talk','sentence'=>$affirmation)
                     ));
         $json = json_encode($response);
-        echo ($json=='[]'?'{}':$json); 
+		// retourner la réponse que s'il y en à une
+		if(($domoticz->getReponsesOn() != "" && $_['state'] == "On" ) or ($domoticz->getReponsesOff() != "" && $_['state'] == "Off" )){
+			echo ($json=='[]'?'{}':$json); 
+		}
 		exit;
 	}
 	
@@ -232,7 +236,7 @@ class DomoticzPlugin{
 		}
 		
 		if($domoticz->getReponsesOn() != "" ){
-			$phrasesOn = explode(';',$domoticz->getReponsesOn());
+			$phrasesOn = explode($this->vocal_sep,$domoticz->getReponsesOn());
 			$phrase = $phrasesOn[rand(0,count($phrasesOn)-1)];
 		}else{
 			$phrase = $this->phrases[$type];
