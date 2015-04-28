@@ -1,5 +1,5 @@
 <?php
-require_once('DomoticzCmd.class.php');
+require_once('classes/DomoticzCmd.class.php');
 
 $table = new DomoticzCmd();
 $table->drop();

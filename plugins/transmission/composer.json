@@ -1,0 +1,19 @@
+{
+    "name": "yana-plugins/transmission",
+    "description": "Plugins pour un serveur transmission",
+    "keywords": ["Transmission","Plugins"],
+    "homepage": "https://github.com/sguernion/yana-plugins/tree/master/plugins/transmission",
+    "type": "plugin",
+    "license": "MIT",
+    "authors": [{
+        "name": "Sylvain Guernion",
+        "email": "email@gmail.com",
+        "homepage": "http://sguernion.github.io/blog/"
+    }],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {"transmission": "/"}
+    }
+}

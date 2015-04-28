@@ -1,16 +1,16 @@
 <?php
 
-require_once('DomoticzCmd.class.php');
-require_once('DomoticzApi.class.php');
-require_once('DomoticzPlugin.class.php');
+require_once('classes/DomoticzCmd.class.php');
+require_once('classes/DomoticzApi.class.php');
+require_once('classes/DomoticzPlugin.class.php');
 
 /*
 @name domoticz
 @author S.Guernion <email@gmail.com>
 @author M.OU <nospam@free.fr>
-@link https://github.com/sguernion/myPI/tree/master/yana-server/plugins/domoticz
+@link https://github.com/sguernion/yana-plugins/tree/master/plugins/domoticz
 @licence CC by nc sa
-@version 1.1.1-snapshot
+@version 1.1.1
 @description Permet la commande vocale des interrupteurs domoticz
 */
 

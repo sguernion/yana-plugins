@@ -1,8 +1,9 @@
 <?php
 /*
 @name KODI
+@author S.Guernion <email@gmail.com>
 @author Stéphane BOLLARD <fafnus@yahoo.fr>
-@link http://blog.idleman.fr
+@link https://github.com/sguernion/yana-plugins/tree/master/plugins/kodi
 @licence CC by nc sa
 @version 2.0.4
 @description Plugin permettant la reconnaissance vocale du Media-Center KODI.
@@ -84,7 +85,7 @@ function kodi_plugin_setting_page(){
 			    <label for="description">Description</label>
 			    <input type="text" name="description" value="<? echo $kodiCmd->getDescription(); ?>" id="description"  />
 			    <label for="kodiJsonCode">Code json de la commande</label>
-			    <input type="text" name="kodiJsonCode" id="kodiJsonCode" value="<? echo $kodiCmd->getJson(); ?>" /> <a href="http://wiki.kodi.org/index.php?title=JSON-RPC_API/v6" target="_blank" >JSON-RPC_API-V6-WIKI </a>
+			    <input type="text" name="kodiJsonCode" id="kodiJsonCode" value='<? echo $kodiCmd->getJson(); ?>' /> <a href="http://wiki.kodi.org/index.php?title=JSON-RPC_API/v6" target="_blank" >JSON-RPC_API-V6-WIKI </a>
                 <label for="room">Pièce</label>
                 <select name="room" id="room">
 			    	<?php foreach($rooms as $room){ ?>
