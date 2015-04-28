@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true"
+         bootstrap="Tests/bootstrap.php">
+    <testsuites>
+        <testsuite name="yana plugins Test Suite">
+            <directory>Tests/plugins/</directory>
+        </testsuite>
+    </testsuites>
+	<logging>
+	<!-- and this is where your report will be written -->
+		<log type="coverage-clover" target="./clover.xml"/>
+	</logging>
+</phpunit>
