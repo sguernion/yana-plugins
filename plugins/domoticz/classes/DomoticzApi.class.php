@@ -14,10 +14,12 @@ class DomoticzApi {
 	function get($url){
 		try {
 				$ch = curl_init();
+				$credentials = $this->getCredentials();
 				$timeout = 5;
 				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+				curl_setopt($ch, CURLOPT_USERPWD, $credentials);
 				$data = curl_exec($ch);
 				curl_close($ch);
 				$infos = json_decode($data, true);
@@ -31,10 +33,17 @@ class DomoticzApi {
 	function __construct($conf){
 		$this->conf = $conf;
 	}
+
+	function getCredentials(){
+		$credentials =	$this->conf->get('user','domoticz');
+		if($this->conf->get('pswd','domoticz')){
+			$credentials .=	':'.$this->conf->get('pswd','domoticz');
+		}
+		return $credentials;
+	}
 	
 	function getUrl(){
 		$url = 'http://';
-		$url .=	$this->conf->get('user','domoticz').':'.$this->conf->get('pswd','domoticz').'@';
 		$url .=	$this->conf->get('ip','domoticz').':'.$this->conf->get('port','domoticz');
 		return $url;
 	}
